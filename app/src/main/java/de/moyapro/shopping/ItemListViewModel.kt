@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import de.moyapro.shopping.model.Item
 import de.moyapro.shopping.model.ItemRepository
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class ItemListViewModel : ViewModel() {
     lateinit var repository: ItemRepository
@@ -13,8 +15,12 @@ class ItemListViewModel : ViewModel() {
 
     fun addItem(item: Item) {
         _itemList.value = (_itemList.value!! + listOf(item)).sortedWith(ItemComparator)
-        if(null == repository.loadAllByIds(item.id)) {
-            repository.insertAll(item)
+        runBlocking {
+            launch {
+                if (null == repository.loadAllByIds(item.id)) {
+                    repository.insertAll(item)
+                }
+            }
         }
     }
 

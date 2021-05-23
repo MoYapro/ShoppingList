@@ -24,6 +24,8 @@ import de.moyapro.shopping.model.Item
 import de.moyapro.shopping.model.ItemRepository
 import de.moyapro.shopping.model.ShoppingDatabase
 import de.moyapro.shopping.ui.theme.ShoppingTheme
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class MainActivity : ComponentActivity() {
@@ -50,7 +52,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MainView() {
-        viewModel.setItems(itemRepository.getAll())
+        runBlocking {
+            launch { viewModel.setItems(itemRepository.getAll()) }
+        }
         ShoppingTheme {
             Surface(color = MaterialTheme.colors.background) {
                 Column {
