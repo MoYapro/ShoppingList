@@ -6,26 +6,32 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequesterModifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.Dp
 import androidx.room.Room
 import de.moyapro.shopping.model.Item
 import de.moyapro.shopping.model.ItemRepository
 import de.moyapro.shopping.model.ShoppingDatabase
 import de.moyapro.shopping.ui.theme.ShoppingTheme
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 class MainActivity : ComponentActivity() {
@@ -52,9 +58,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MainView() {
-        runBlocking {
-            launch { viewModel.setItems(itemRepository.getAll()) }
-        }
+//        runBlocking {
+//            launch { viewModel.setItems(itemRepository.getAll()) }
+//        }
         ShoppingTheme {
             Surface(color = MaterialTheme.colors.background) {
                 Column {
@@ -68,6 +74,35 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AddItemView(viewModel: ItemListViewModel) {
         val textState = remember { mutableStateOf("") }
+        val items =
+            if ("" == textState.value) {
+                emptyList()
+            } else {
+                listOf(
+                    "Apfel",
+                    "Milch",
+                    "Butter",
+                    "Brot",
+                    "Bier",
+                    "Brei",
+                    "Banane",
+                ).filter { it.contains(textState.value) }
+            }
+            Column(
+                modifier = Modifier.border(
+                    width = Dp(1F), brush = SolidColor(Color.Black), shape = RectangleShape
+                )
+                    .fillMaxWidth()
+            ) {
+                items.forEach { suggestionText ->
+                    ClickableText(text = AnnotatedString(suggestionText), onClick = {
+                        viewModel.addItem(
+                            Item(name = suggestionText)
+                        )
+                        textState.value = ""
+                    })
+                }
+            }
         Row {
             TextField(
                 value = textState.value,
@@ -80,6 +115,7 @@ class MainActivity : ComponentActivity() {
                     viewModel.addItem(
                         Item(name = textState.value)
                     )
+                    textState.value = ""
                 },
                 modifier = Modifier.clip(shape = CircleShape)
             ) {
@@ -87,6 +123,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
 }
 

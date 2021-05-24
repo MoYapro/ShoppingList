@@ -15,13 +15,13 @@ class ItemListViewModel : ViewModel() {
 
     fun addItem(item: Item) {
         _itemList.value = (_itemList.value!! + listOf(item)).sortedWith(ItemComparator)
-        runBlocking {
-            launch {
-                if (null == repository.loadAllByIds(item.id)) {
-                    repository.insertAll(item)
-                }
-            }
-        }
+//        runBlocking {
+//            launch {
+//                if (null == repository.loadAllByIds(item.id)) {
+//                    repository.insertAll(item)
+//                }
+//            }
+//        }
     }
 
     fun removeItem(item: Item) {
