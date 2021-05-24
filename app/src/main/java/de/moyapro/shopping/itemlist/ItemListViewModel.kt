@@ -1,27 +1,19 @@
-package de.moyapro.shopping
+package de.moyapro.shopping.itemlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import de.moyapro.shopping.event.AddItemEvent
 import de.moyapro.shopping.model.Item
-import de.moyapro.shopping.model.ItemRepository
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import org.greenrobot.eventbus.Subscribe
 
 class ItemListViewModel : ViewModel() {
-    lateinit var repository: ItemRepository
+    lateinit var repository: ReadItemsRepository
     private var _itemList: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
     val items: LiveData<List<Item>> = _itemList
 
     fun addItem(item: Item) {
         _itemList.value = (_itemList.value!! + listOf(item)).sortedWith(ItemComparator)
-//        runBlocking {
-//            launch {
-//                if (null == repository.loadAllByIds(item.id)) {
-//                    repository.insertAll(item)
-//                }
-//            }
-//        }
     }
 
     fun removeItem(item: Item) {
