@@ -10,13 +10,6 @@ class ItemListController(
     @Subscribe
     fun addItem(addItemEvent: AddItemEvent) {
         viewModel.addItem(addItemEvent.newItem)
-        //        runBlocking {
-//            launch {
-//                if (null == repository.loadAllByIds(item.id)) {
-//                    repository.insertAll(item)
-//                }
-//            }
-//        }
     }
 
 }

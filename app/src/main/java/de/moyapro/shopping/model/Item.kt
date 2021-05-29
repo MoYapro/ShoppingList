@@ -7,9 +7,10 @@ import java.util.*
 @Entity(tableName = "item")
 data class Item(
     @PrimaryKey
-    val id: Long,
-    val name: String,
-    val checked: Boolean = false
+    val itemId: Long,
+    val itemName: String,
+    val checked: Boolean,
+    val added: Boolean
 ) {
-    constructor(name: String, checked: Boolean = false) : this(Random().nextLong(), name, checked)
+    constructor(name: String, checked: Boolean = false, added: Boolean = false) : this(Random().nextLong(), name, checked, added)
 }

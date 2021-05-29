@@ -1,4 +1,4 @@
-package de.moyapro.shopping.ui.components
+package de.moyapro.shopping.additem
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -20,12 +20,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import de.moyapro.shopping.event.AddItemEvent
-import de.moyapro.shopping.itemlist.ItemListViewModel
 import de.moyapro.shopping.model.Item
 import org.greenrobot.eventbus.EventBus
 
 @Composable
-fun AddItemComponent(viewModel: ItemListViewModel) {
+fun AddItemComponent() {
     val textState = remember { mutableStateOf("") }
     val items =
         if ("" == textState.value) {
@@ -77,7 +76,7 @@ fun AddItemComponent(viewModel: ItemListViewModel) {
 private fun postNewItemEvent(suggestionText: String) {
     EventBus.getDefault().post(
         AddItemEvent(
-            Item(name = suggestionText)
+            Item(name = suggestionText, added = true)
         )
     )
 }

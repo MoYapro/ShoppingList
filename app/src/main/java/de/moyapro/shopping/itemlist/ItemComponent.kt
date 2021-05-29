@@ -17,10 +17,17 @@ fun ItemComponent(item: Item, update: (Item) -> Unit) {
         targetValue = if (item.checked) Color.Green else Color.Transparent
     )
     Text(
-        text = item.name,
+        text = item.toString(),
         modifier = Modifier
             .fillMaxWidth()
             .background(color = backgroundColor)
-            .clickable(onClick = { update(Item(item.id, item.name, !item.checked)) })
+            .clickable(onClick = { update(
+                Item(
+                item.itemId,
+                item.itemName,
+                !item.checked,
+                item.added
+            )
+            ) })
     )
 }

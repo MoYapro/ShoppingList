@@ -3,12 +3,9 @@ package de.moyapro.shopping.itemlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import de.moyapro.shopping.event.AddItemEvent
 import de.moyapro.shopping.model.Item
-import org.greenrobot.eventbus.Subscribe
 
 class ItemListViewModel : ViewModel() {
-    lateinit var repository: ReadItemsRepository
     private var _itemList: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
     val items: LiveData<List<Item>> = _itemList
 
@@ -26,7 +23,7 @@ class ItemListViewModel : ViewModel() {
 
     val updateItem = { item: Item ->
         _itemList.value = _itemList.value!!.map { listItem ->
-            if (item.id == listItem.id) {
+            if (item.itemId == listItem.itemId) {
                 item
             } else {
                 listItem
@@ -39,7 +36,7 @@ class ItemListViewModel : ViewModel() {
 object ItemComparator : Comparator<Item> {
 
     override fun compare(item1: Item, item2: Item): Int {
-        return 100 * item1.checked.compareTo(item2.checked) + item1.name.compareTo(item2.name)
+        return 100 * item1.checked.compareTo(item2.checked) + item1.itemName.compareTo(item2.itemName)
     }
 
 }
