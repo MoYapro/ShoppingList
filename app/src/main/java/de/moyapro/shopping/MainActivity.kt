@@ -11,19 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.room.Room
 import de.moyapro.shopping.action.ActionBar
 import de.moyapro.shopping.action.ActionController
-import de.moyapro.shopping.itemlist.ItemListController
-import de.moyapro.shopping.model.Item
-import de.moyapro.shopping.itemlist.ItemListViewModel
 import de.moyapro.shopping.additem.AddItemComponent
 import de.moyapro.shopping.additem.AddItemController
 import de.moyapro.shopping.event.ReloadEvent
+import de.moyapro.shopping.itemlist.ItemListController
+import de.moyapro.shopping.itemlist.ItemListViewModel
 import de.moyapro.shopping.itemlist.ShoppingListView
 import de.moyapro.shopping.repository.ItemRepository
 import de.moyapro.shopping.ui.theme.ShoppingTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 
 

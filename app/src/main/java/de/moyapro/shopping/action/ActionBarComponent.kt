@@ -14,13 +14,13 @@ import org.greenrobot.eventbus.EventBus
 @Composable
 fun ActionBar() {
     Row {
-        removeCheckedButton()
-        reloadFromDatabaseButton()
+        RemoveCheckedButton()
+        ReloadFromDatabaseButton()
     }
 }
 
 @Composable
-private fun removeCheckedButton() {
+private fun RemoveCheckedButton() {
     Button(
         onClick = {
             EventBus.getDefault().post(
@@ -34,7 +34,7 @@ private fun removeCheckedButton() {
 }
 
 @Composable
-private fun reloadFromDatabaseButton() {
+private fun ReloadFromDatabaseButton() {
     Button(
         onClick = {
             EventBus.getDefault().post(
