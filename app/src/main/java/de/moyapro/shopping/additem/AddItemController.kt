@@ -1,6 +1,7 @@
 package de.moyapro.shopping.additem
 
 import de.moyapro.shopping.event.AddItemEvent
+import de.moyapro.shopping.repository.ItemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -8,7 +9,7 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.Subscribe
 
 class AddItemController(
-    private val addItemRepository: AddItemRepository
+    private val itemRepository: ItemRepository
 ) {
 
     @Subscribe
@@ -17,7 +18,7 @@ class AddItemController(
         runBlocking {
             launch {
                 withContext(Dispatchers.IO) {
-                    addItemRepository.insertAll(item)
+                    itemRepository.insertAll(item)
                 }
             }
         }

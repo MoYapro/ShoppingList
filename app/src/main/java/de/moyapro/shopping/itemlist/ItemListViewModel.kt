@@ -21,6 +21,12 @@ class ItemListViewModel : ViewModel() {
         _itemList.value = items.sortedWith(ItemComparator)
     }
 
+    fun removeCheckedItems() {
+        _itemList.value = _itemList.value!!.filter { item ->
+            !item.checked
+        }.sortedWith(ItemComparator)
+    }
+
     val updateItem = { item: Item ->
         _itemList.value = _itemList.value!!.map { listItem ->
             if (item.itemId == listItem.itemId) {
