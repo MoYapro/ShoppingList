@@ -1,6 +1,6 @@
 package de.moyapro.shopping.additem
 
-import de.moyapro.shopping.event.AddItemEvent
+import de.moyapro.shopping.event.ItemAddedEvent
 import de.moyapro.shopping.repository.ItemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,8 +13,8 @@ class AddItemController(
 ) {
 
     @Subscribe
-    fun addItem(addItemEvent: AddItemEvent) {
-        val item = addItemEvent.newItem
+    fun addItem(itemAddedEvent: ItemAddedEvent) {
+        val item = itemAddedEvent.newItem
         runBlocking {
             launch {
                 withContext(Dispatchers.IO) {

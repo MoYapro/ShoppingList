@@ -1,3 +1,3 @@
 package de.moyapro.shopping.event
 
-object RemoveCheckedEvent
+object ReloadEvent

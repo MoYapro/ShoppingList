@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
-import de.moyapro.shopping.event.AddItemEvent
+import de.moyapro.shopping.event.ItemAddedEvent
 import de.moyapro.shopping.model.Item
 import org.greenrobot.eventbus.EventBus
 
@@ -75,7 +75,7 @@ fun AddItemComponent() {
 
 private fun postNewItemEvent(suggestionText: String) {
     EventBus.getDefault().post(
-        AddItemEvent(
+        ItemAddedEvent(
             Item(name = suggestionText, added = true)
         )
     )

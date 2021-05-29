@@ -7,21 +7,42 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import de.moyapro.shopping.event.ReloadEvent
 import de.moyapro.shopping.event.RemoveCheckedEvent
 import org.greenrobot.eventbus.EventBus
 
 @Composable
 fun ActionBar() {
     Row {
-        Button(
-            onClick = {
-                EventBus.getDefault().post(
-                    RemoveCheckedEvent()
-                )
-            },
-            modifier = Modifier.clip(shape = CircleShape)
-        ) {
-            Text("Clear")
-        }
+        removeCheckedButton()
+        reloadFromDatabaseButton()
+    }
+}
+
+@Composable
+private fun removeCheckedButton() {
+    Button(
+        onClick = {
+            EventBus.getDefault().post(
+                RemoveCheckedEvent
+            )
+        },
+        modifier = Modifier.clip(shape = CircleShape)
+    ) {
+        Text("Clear")
+    }
+}
+
+@Composable
+private fun reloadFromDatabaseButton() {
+    Button(
+        onClick = {
+            EventBus.getDefault().post(
+                ReloadEvent
+            )
+        },
+        modifier = Modifier.clip(shape = CircleShape)
+    ) {
+        Text("Reload")
     }
 }

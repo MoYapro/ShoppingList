@@ -16,6 +16,7 @@ import de.moyapro.shopping.model.Item
 import de.moyapro.shopping.itemlist.ItemListViewModel
 import de.moyapro.shopping.additem.AddItemComponent
 import de.moyapro.shopping.additem.AddItemController
+import de.moyapro.shopping.event.ReloadEvent
 import de.moyapro.shopping.itemlist.ShoppingListView
 import de.moyapro.shopping.repository.ItemRepository
 import de.moyapro.shopping.ui.theme.ShoppingTheme
@@ -44,10 +45,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(ItemListController(viewModel))
+        EventBus.getDefault().register(ItemListController(itemRepository, viewModel))
         EventBus.getDefault().register(AddItemController(itemRepository))
         EventBus.getDefault().register(ActionController(itemRepository))
-
         setContent {
             MainView()
         }
@@ -55,15 +55,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MainView() {
-        runBlocking {
-            launch {
-                lateinit var loadedItems: List<Item>
-                withContext(Dispatchers.IO) {
-                    loadedItems = itemRepository.getAll()
-                }
-                viewModel.setItems(loadedItems)
-            }
-        }
+        EventBus.getDefault().post(ReloadEvent)
         ShoppingTheme {
             Surface(color = MaterialTheme.colors.background) {
                 Column {

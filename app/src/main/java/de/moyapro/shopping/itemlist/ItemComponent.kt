@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import de.moyapro.shopping.event.ItemCheckedEvent
 import de.moyapro.shopping.model.Item
+import org.greenrobot.eventbus.EventBus
 
 @Composable
 fun ItemComponent(item: Item, update: (Item) -> Unit) {
@@ -21,13 +23,12 @@ fun ItemComponent(item: Item, update: (Item) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(color = backgroundColor)
-            .clickable(onClick = { update(
-                Item(
-                item.itemId,
-                item.itemName,
-                !item.checked,
-                item.added
-            )
-            ) })
+            .clickable(onClick = {
+                val updatedItem = item.copy(checked = !item.checked)
+                EventBus
+                    .getDefault()
+                    .post(ItemCheckedEvent(updatedItem))
+                update(updatedItem)
+            })
     )
 }
