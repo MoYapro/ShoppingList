@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
             Surface(color = MaterialTheme.colors.background) {
                 Column {
                     ShoppingListView(viewModel = viewModel)
-                    AddItemComponent()
+                    AddItemComponent(itemRepository)
                     ActionBar()
                 }
             }

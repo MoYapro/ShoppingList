@@ -21,24 +21,36 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import de.moyapro.shopping.event.ItemAddedEvent
 import de.moyapro.shopping.model.Item
+import de.moyapro.shopping.repository.ItemRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
+import java.util.*
 
 @Composable
-fun AddItemComponent() {
+fun AddItemComponent(itemRepository: ItemRepository) {
     val textState = remember { mutableStateOf("") }
     val items =
         if ("" == textState.value) {
             emptyList()
         } else {
-            listOf(
-                "Apfel",
-                "Milch",
-                "Butter",
-                "Brot",
-                "Bier",
-                "Brei",
-                "Banane",
-            ).filter { it.contains(textState.value) }
+            var savedItemsList: List<Item> = emptyList()
+            runBlocking {
+                launch {
+                    withContext(Dispatchers.IO) {
+                        savedItemsList = itemRepository.getAll()
+                    }
+                }
+            }
+            savedItemsList.filter { item ->
+                item.itemName.toLowerCase(Locale.getDefault()).contains(
+                    textState.value.toLowerCase(
+                        Locale.getDefault()
+                    )
+                )
+            }
         }
     Column(
         modifier = Modifier
@@ -47,9 +59,9 @@ fun AddItemComponent() {
             )
             .fillMaxWidth()
     ) {
-        items.forEach { suggestionText ->
-            ClickableText(text = AnnotatedString(suggestionText), onClick = {
-                postNewItemEvent(suggestionText)
+        items.forEach { suggestedItem ->
+            ClickableText(text = AnnotatedString(suggestedItem.itemName), onClick = {
+                postNewItemEvent(suggestedItem.itemName)
                 textState.value = ""
             })
         }
@@ -76,7 +88,7 @@ fun AddItemComponent() {
 private fun postNewItemEvent(suggestionText: String) {
     EventBus.getDefault().post(
         ItemAddedEvent(
-            Item(name = suggestionText, added = true)
+            Item(name = suggestionText, checked = false, added = true)
         )
     )
 }
