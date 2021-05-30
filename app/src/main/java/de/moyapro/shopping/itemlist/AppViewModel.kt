@@ -3,9 +3,14 @@ package de.moyapro.shopping.itemlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import de.moyapro.shopping.AppState
 import de.moyapro.shopping.model.Item
 
-class ItemListViewModel : ViewModel() {
+class AppViewModel : ViewModel() {
+
+    private var _state: MutableLiveData<AppState> = MutableLiveData(AppState.PLANNING)
+    val state: LiveData<AppState> = _state
+
     private var _itemList: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
     val items: LiveData<List<Item>> = _itemList
 
@@ -25,6 +30,10 @@ class ItemListViewModel : ViewModel() {
         _itemList.value = _itemList.value!!.filter { item ->
             !item.checked
         }.sortedWith(ItemComparator)
+    }
+
+    fun setState(state: AppState) {
+        _state.value = state
     }
 
     val updateItem = { item: Item ->

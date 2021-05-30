@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.Subscribe
 
 class ItemListController(
     private val itemRepository: ItemRepository,
-    private val viewModel: ItemListViewModel
+    private val viewModel: AppViewModel
 ) {
 
     @Subscribe

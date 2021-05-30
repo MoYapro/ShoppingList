@@ -5,17 +5,34 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import de.moyapro.shopping.AppState
+import de.moyapro.shopping.AppState.*
+import de.moyapro.shopping.event.AppStateChangedEvent
 import de.moyapro.shopping.event.ReloadEvent
 import de.moyapro.shopping.event.RemoveCheckedEvent
+import de.moyapro.shopping.itemlist.AppViewModel
 import org.greenrobot.eventbus.EventBus
 
+
 @Composable
-fun ActionBar() {
+fun ActionBar(viewModel: AppViewModel) {
+    val (state, setValue) = remember { mutableStateOf(viewModel.state.value ?: PLANNING)}
     Row {
         RemoveCheckedButton()
         ReloadFromDatabaseButton()
+        val update: (AppState) -> Unit = { newState ->
+            setValue(newState)
+            viewModel.setState(newState)
+        }
+        when (state) {
+            PLANNING -> GoShoppingButton(update)
+            SHOPPING -> DoPlanningButton(update)
+        }
     }
 }
 
@@ -44,5 +61,35 @@ private fun ReloadFromDatabaseButton() {
         modifier = Modifier.clip(shape = CircleShape)
     ) {
         Text("Reload")
+    }
+}
+
+@Composable
+private fun GoShoppingButton(update: (AppState) -> Unit) {
+    Button(
+        onClick = {
+            update(SHOPPING)
+//            EventBus.getDefault().post(
+//                AppStateChangedEvent(newState = SHOPPING)
+//            )
+        },
+        modifier = Modifier.clip(shape = CircleShape)
+    ) {
+        Text("Shop")
+    }
+}
+
+@Composable
+private fun DoPlanningButton(update: (AppState) -> Unit) {
+    Button(
+        onClick = {
+            update(PLANNING)
+//            EventBus.getDefault().post(
+//                AppStateChangedEvent(newState = PLANNING)
+//            )
+        },
+        modifier = Modifier.clip(shape = CircleShape)
+    ) {
+        Text("Plan")
     }
 }
