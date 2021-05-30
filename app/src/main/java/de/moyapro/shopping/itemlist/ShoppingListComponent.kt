@@ -8,14 +8,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import de.moyapro.shopping.AppState
 import de.moyapro.shopping.model.Item
 
 @Composable
 fun ShoppingListView(viewModel: AppViewModel, modifier: Modifier = Modifier) {
     val itemList: List<Item> by viewModel.items.observeAsState(listOf())
+    val appState = viewModel.state.observeAsState(initial = AppState.PLANNING)
     LazyColumn(modifier = modifier) {
         items(items = itemList) { theItem ->
-            ItemComponent(item = theItem, state = viewModel.state, update = viewModel.updateItem)
+    when(appState.value) {
+        AppState.PLANNING -> EditItemComponent(item = theItem, update = viewModel.updateItem)
+        AppState.SHOPPING -> ShoppingItemComponent(item = theItem, update = viewModel.updateItem)
+    }
             Divider(color = Color.Black)
         }
     }

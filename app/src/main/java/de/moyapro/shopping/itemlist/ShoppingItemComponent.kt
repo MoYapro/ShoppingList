@@ -6,28 +6,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.LiveData
-import de.moyapro.shopping.AppState
-import de.moyapro.shopping.AppState.*
 import de.moyapro.shopping.event.ItemCheckedEvent
 import de.moyapro.shopping.model.Item
 import org.greenrobot.eventbus.EventBus
 
 @Composable
-fun ItemComponent(item: Item, state: LiveData<AppState>, update: (Item) -> Unit) {
-    val appState = state.observeAsState(initial = PLANNING)
+fun ShoppingItemComponent(item: Item, update: (Item) -> Unit) {
     val backgroundColor by animateColorAsState(
         targetValue = if (item.checked) Color.Green else Color.Transparent
     )
-    val displayText = when(appState.value) {
-        PLANNING -> item.toString()
-        SHOPPING -> item.itemName
-    }
     Text(
-        text = displayText,
+        text = item.itemName,
         modifier = Modifier
             .fillMaxWidth()
             .background(color = backgroundColor)

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "item")
-data class Item(
+data class Item constructor(
     @PrimaryKey
     val itemId: Long,
     val itemName: String,

@@ -17,6 +17,7 @@ import de.moyapro.shopping.event.ReloadEvent
 import de.moyapro.shopping.itemlist.ItemListController
 import de.moyapro.shopping.itemlist.AppViewModel
 import de.moyapro.shopping.itemlist.ShoppingListView
+import de.moyapro.shopping.itemlist.UpdateItemController
 import de.moyapro.shopping.repository.ItemRepository
 import de.moyapro.shopping.ui.theme.ShoppingTheme
 import org.greenrobot.eventbus.EventBus
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(ItemListController(itemRepository, viewModel))
         EventBus.getDefault().register(AddItemController(itemRepository))
+        EventBus.getDefault().register(UpdateItemController(itemRepository, viewModel))
         EventBus.getDefault().register(ActionController(itemRepository, viewModel))
         setContent {
             MainView()
@@ -54,9 +56,9 @@ class MainActivity : ComponentActivity() {
         ShoppingTheme {
             Surface(color = MaterialTheme.colors.background) {
                 Column {
+                    ActionBar(viewModel)
                     ShoppingListView(viewModel)
                     AddItemComponent(itemRepository)
-                    ActionBar(viewModel)
                 }
             }
         }
