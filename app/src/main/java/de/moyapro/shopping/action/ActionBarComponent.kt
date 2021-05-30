@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import de.moyapro.shopping.AppState
@@ -21,12 +18,12 @@ import org.greenrobot.eventbus.EventBus
 
 @Composable
 fun ActionBar(viewModel: AppViewModel) {
-    val (state, setValue) = remember { mutableStateOf(viewModel.state.value ?: PLANNING)}
+    var state by remember { mutableStateOf(viewModel.state.value ?: PLANNING) }
     Row {
         RemoveCheckedButton()
         ReloadFromDatabaseButton()
         val update: (AppState) -> Unit = { newState ->
-            setValue(newState)
+            state = newState
             viewModel.setState(newState)
         }
         when (state) {
