@@ -18,6 +18,7 @@ import de.moyapro.shopping.itemlist.ItemListController
 import de.moyapro.shopping.itemlist.AppViewModel
 import de.moyapro.shopping.itemlist.ShoppingListView
 import de.moyapro.shopping.itemlist.UpdateItemController
+import de.moyapro.shopping.repository.CartItemRepository
 import de.moyapro.shopping.repository.ItemRepository
 import de.moyapro.shopping.ui.theme.ShoppingTheme
 import org.greenrobot.eventbus.EventBus
@@ -39,9 +40,14 @@ class MainActivity : ComponentActivity() {
         respository
     }
 
+    private val cartItemRepository: CartItemRepository by lazy {
+        val respository = db.cartItemRepository()
+        respository
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(ItemListController(itemRepository, viewModel))
+        EventBus.getDefault().register(ItemListController(cartItemRepository, viewModel))
         EventBus.getDefault().register(AddItemController(itemRepository))
         EventBus.getDefault().register(UpdateItemController(itemRepository, viewModel))
         EventBus.getDefault().register(ActionController(itemRepository, viewModel))
