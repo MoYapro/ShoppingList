@@ -9,20 +9,20 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import de.moyapro.shopping.event.ItemAddedEvent
 import de.moyapro.shopping.event.ItemUpdatedEvent
-import de.moyapro.shopping.model.Item
+import de.moyapro.shopping.model.CartItem
+import de.moyapro.shopping.model.CartItemRelation
 import org.greenrobot.eventbus.EventBus
 
 @Composable
-fun EditItemComponent(item: Item, update: (Item) -> Unit) {
+fun EditItemComponent(cartItem: CartItemRelation, update: (CartItemRelation) -> Unit) {
     var isEdited: Boolean by remember {
         mutableStateOf(false)
     }
     when (isEdited) {
-        false -> displayView(item) { isEdited = !isEdited }
+        false -> displayView(cartItem) { isEdited = !isEdited }
         true -> editView(
-            item,
+            cartItem,
             { isEdited = !isEdited },
             { editedItem -> postItemEditedEvent(editedItem) })
     }
@@ -30,8 +30,8 @@ fun EditItemComponent(item: Item, update: (Item) -> Unit) {
 }
 
 @Composable
-fun editView(item: Item, switchMode: () -> Unit, save: (Item) -> Unit) {
-    var editName by remember { mutableStateOf(item.itemName) }
+fun editView(item: CartItemRelation, switchMode: () -> Unit, save: (CartItemRelation) -> Unit) {
+    var editName by remember { mutableStateOf(item.item.itemName) }
     Column {
         TextField(
             value = editName,
@@ -42,7 +42,8 @@ fun editView(item: Item, switchMode: () -> Unit, save: (Item) -> Unit) {
         )
         Row {
             Button(onClick = {
-                save(item.copy(itemName = editName, added = true))
+                val updatedItem = item.item.copy(itemName = editName, added = true)
+                save(CartItemRelation(CartItem(updatedItem.itemId), updatedItem))
                 switchMode()
             }) {
                 Text(text = "✓")
@@ -56,11 +57,11 @@ fun editView(item: Item, switchMode: () -> Unit, save: (Item) -> Unit) {
 
 @Composable
 private fun displayView(
-    item: Item,
+    item: CartItemRelation,
     switchMode: () -> Unit
 ) {
     Text(
-        text = item.itemName,
+        text = item.item.itemName,
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = switchMode)
@@ -68,7 +69,7 @@ private fun displayView(
 }
 
 
-private fun postItemEditedEvent(updatedItem: Item) {
+private fun postItemEditedEvent(updatedItem: CartItemRelation) {
     EventBus.getDefault().post(
         ItemUpdatedEvent(updatedItem)
     )

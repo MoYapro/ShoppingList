@@ -3,9 +3,9 @@ package de.moyapro.shopping.itemlist
 import de.moyapro.shopping.event.ItemAddedEvent
 import de.moyapro.shopping.event.ReloadEvent
 import de.moyapro.shopping.event.RemoveCheckedEvent
-import de.moyapro.shopping.model.Item
+import de.moyapro.shopping.model.CartItem
+import de.moyapro.shopping.model.CartItemRelation
 import de.moyapro.shopping.repository.CartItemRepository
-import de.moyapro.shopping.repository.ItemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -19,7 +19,13 @@ class ItemListController(
 
     @Subscribe
     fun addItem(itemAddedEvent: ItemAddedEvent) {
-        viewModel.addItem(itemAddedEvent.newItem)
+        val addedItem = itemAddedEvent.newItem
+        viewModel.addItem(
+            CartItemRelation(
+                CartItem(addedItem.itemId),
+                addedItem
+            )
+        )
     }
 
     @Subscribe
@@ -31,11 +37,11 @@ class ItemListController(
     fun reload(removeCheckedEvent: ReloadEvent) {
         runBlocking {
             launch {
-                lateinit var loadedItems: List<Item>
+                lateinit var loadedItems: List<CartItemRelation>
                 withContext(Dispatchers.IO) {
-                    loadedItems = cartItemRepository.getAll().map { it.item }
+                    loadedItems = cartItemRepository.getAll()
                 }
-                viewModel.setItems(loadedItems.filter { it.added })
+                viewModel.setItems(loadedItems)
             }
         }
     }

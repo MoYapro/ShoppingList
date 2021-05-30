@@ -1,7 +1,7 @@
 package de.moyapro.shopping.itemlist
 
 import de.moyapro.shopping.event.ItemUpdatedEvent
-import de.moyapro.shopping.repository.ItemRepository
+import de.moyapro.shopping.repository.CartItemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.Subscribe
 
 class UpdateItemController(
-    private val itemRepository: ItemRepository,
+    private val cartItemRepository: CartItemRepository,
     private val viewModel: AppViewModel
 ) {
 
@@ -20,7 +20,8 @@ class UpdateItemController(
         runBlocking {
             launch {
                 withContext(Dispatchers.IO) {
-                    itemRepository.updateAll(item)
+                    cartItemRepository.updateAll(item.cartItem)
+                    cartItemRepository.updateAll(item.item)
                 }
             }
         }

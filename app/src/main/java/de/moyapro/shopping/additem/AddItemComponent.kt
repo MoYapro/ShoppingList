@@ -18,6 +18,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import de.moyapro.shopping.event.ItemAddedEvent
+import de.moyapro.shopping.model.CartItem
+import de.moyapro.shopping.model.CartItemRelation
 import de.moyapro.shopping.model.Item
 import de.moyapro.shopping.repository.ItemRepository
 import kotlinx.coroutines.Dispatchers
@@ -85,9 +87,10 @@ fun AddItemComponent(itemRepository: ItemRepository) {
 }
 
 private fun postNewItemEvent(suggestionText: String) {
+    val newItem = Item(name = suggestionText, checked = false, added = true)
     EventBus.getDefault().post(
         ItemAddedEvent(
-            Item(name = suggestionText, checked = false, added = true)
+            newItem
         )
     )
 }

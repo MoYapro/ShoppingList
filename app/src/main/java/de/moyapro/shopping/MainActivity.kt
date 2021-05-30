@@ -49,8 +49,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(ItemListController(cartItemRepository, viewModel))
         EventBus.getDefault().register(AddItemController(itemRepository))
-        EventBus.getDefault().register(UpdateItemController(itemRepository, viewModel))
-        EventBus.getDefault().register(ActionController(itemRepository, viewModel))
+        EventBus.getDefault().register(UpdateItemController(cartItemRepository, viewModel))
+        EventBus.getDefault().register(ActionController(cartItemRepository, viewModel))
         setContent {
             MainView()
         }

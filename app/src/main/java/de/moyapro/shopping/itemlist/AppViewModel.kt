@@ -4,31 +4,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import de.moyapro.shopping.AppState
-import de.moyapro.shopping.model.Item
+import de.moyapro.shopping.model.CartItemRelation
 
 class AppViewModel : ViewModel() {
 
     private var _state: MutableLiveData<AppState> = MutableLiveData(AppState.PLANNING)
     val state: LiveData<AppState> = _state
 
-    private var _itemList: MutableLiveData<List<Item>> = MutableLiveData(emptyList())
-    val items: LiveData<List<Item>> = _itemList
+    private var _itemList: MutableLiveData<List<CartItemRelation>> = MutableLiveData(emptyList())
+    val items: LiveData<List<CartItemRelation>> = _itemList
 
-    fun addItem(item: Item) {
+    fun addItem(item: CartItemRelation) {
         _itemList.value = (_itemList.value!! + listOf(item)).sortedWith(ItemComparator)
     }
 
-    fun removeItem(item: Item) {
+    fun removeItem(item: CartItemRelation) {
         _itemList.value = _itemList.value!!.filterNot { it === item }
     }
 
-    fun setItems(items: List<Item>) {
+    fun setItems(items: List<CartItemRelation>) {
         _itemList.value = items.sortedWith(ItemComparator)
     }
 
     fun removeCheckedItems() {
         _itemList.value = _itemList.value!!.filter { item ->
-            !item.checked
+            !item.cartItem.checked
         }.sortedWith(ItemComparator)
     }
 
@@ -36,9 +36,9 @@ class AppViewModel : ViewModel() {
         _state.value = state
     }
 
-    val updateItem = { item: Item ->
+    val updateItem = { item: CartItemRelation ->
         _itemList.value = _itemList.value!!.map { listItem ->
-            if (item.itemId == listItem.itemId) {
+            if (item.item.itemId == listItem.item.itemId) {
                 item
             } else {
                 listItem
@@ -48,10 +48,12 @@ class AppViewModel : ViewModel() {
 
 }
 
-object ItemComparator : Comparator<Item> {
+object ItemComparator : Comparator<CartItemRelation> {
 
-    override fun compare(item1: Item, item2: Item): Int {
-        return 100 * item1.checked.compareTo(item2.checked) + item1.itemName.compareTo(item2.itemName)
+    override fun compare(item1: CartItemRelation, item2: CartItemRelation): Int {
+        return 100 * item1.cartItem.checked.compareTo(item2.cartItem.checked) + item1.item.itemName.compareTo(
+            item2.item.itemName
+        )
     }
 
 }

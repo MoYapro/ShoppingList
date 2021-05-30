@@ -26,6 +26,4 @@ interface ItemRepository {
     @Update
     fun updateAll(vararg item: Item)
 
-    @Query("SELECT * FROM Item WHERE checked")
-    fun getChecked(): List<Item>
 }
