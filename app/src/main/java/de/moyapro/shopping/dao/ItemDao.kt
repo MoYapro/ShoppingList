@@ -1,4 +1,4 @@
-package de.moyapro.shopping.repository
+package de.moyapro.shopping.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -7,7 +7,7 @@ import androidx.room.Update
 import de.moyapro.shopping.model.Item
 
 @Dao
-interface ItemRepository {
+interface ItemDao {
     @Query("SELECT * FROM item")
     fun getAll(): List<Item>
 

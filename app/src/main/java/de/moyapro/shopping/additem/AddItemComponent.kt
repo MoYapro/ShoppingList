@@ -18,10 +18,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import de.moyapro.shopping.event.ItemAddedEvent
-import de.moyapro.shopping.model.CartItem
-import de.moyapro.shopping.model.CartItemRelation
 import de.moyapro.shopping.model.Item
-import de.moyapro.shopping.repository.ItemRepository
+import de.moyapro.shopping.dao.ItemDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -31,7 +29,7 @@ import java.util.*
 
 
 @Composable
-fun AddItemComponent(itemRepository: ItemRepository) {
+fun AddItemComponent(itemDao: ItemDao) {
     var textState by remember { mutableStateOf("") }
     val items =
         if ("" == textState) {
@@ -41,7 +39,7 @@ fun AddItemComponent(itemRepository: ItemRepository) {
             runBlocking {
                 launch {
                     withContext(Dispatchers.IO) {
-                        savedItemsList = itemRepository.getAll()
+                        savedItemsList = itemDao.getAll()
                     }
                 }
             }

@@ -6,8 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.moyapro.shopping.model.CartItem
 import de.moyapro.shopping.model.Item
-import de.moyapro.shopping.repository.CartItemRepository
-import de.moyapro.shopping.repository.ItemRepository
+import de.moyapro.shopping.dao.CartItemDao
+import de.moyapro.shopping.dao.ItemDao
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Before
@@ -18,8 +18,8 @@ import org.junit.runner.RunWith
 class ShoppingDatabaseTest: TestCase() {
 
     private lateinit var shoppingDb: ShoppingDatabase
-    private lateinit var itemDao: ItemRepository
-    private lateinit var cartItemDao: CartItemRepository
+    private lateinit var itemDao: ItemDao
+    private lateinit var cartItemDao: CartItemDao
 
     @Before
     public override fun setUp() {

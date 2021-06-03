@@ -1,4 +1,4 @@
-package de.moyapro.shopping.repository
+package de.moyapro.shopping.dao
 
 import androidx.room.*
 import de.moyapro.shopping.model.CartItem
@@ -6,7 +6,7 @@ import de.moyapro.shopping.model.CartItemRelation
 import de.moyapro.shopping.model.Item
 
 @Dao
-interface CartItemRepository {
+interface CartItemDao {
 
     @Transaction
     @Query("SELECT * FROM cartitem")

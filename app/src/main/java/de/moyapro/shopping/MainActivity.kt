@@ -18,8 +18,8 @@ import de.moyapro.shopping.itemlist.ItemListController
 import de.moyapro.shopping.itemlist.AppViewModel
 import de.moyapro.shopping.itemlist.ShoppingListView
 import de.moyapro.shopping.itemlist.UpdateItemController
-import de.moyapro.shopping.repository.CartItemRepository
-import de.moyapro.shopping.repository.ItemRepository
+import de.moyapro.shopping.dao.CartItemDao
+import de.moyapro.shopping.dao.ItemDao
 import de.moyapro.shopping.ui.theme.ShoppingTheme
 import org.greenrobot.eventbus.EventBus
 
@@ -35,22 +35,22 @@ class MainActivity : ComponentActivity() {
             .fallbackToDestructiveMigration()
             .build()
     }
-    private val itemRepository: ItemRepository by lazy {
+    private val itemDao: ItemDao by lazy {
         val respository = db.itemRepository()
         respository
     }
 
-    private val cartItemRepository: CartItemRepository by lazy {
+    private val cartItemDao: CartItemDao by lazy {
         val respository = db.cartItemRepository()
         respository
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(ItemListController(cartItemRepository, viewModel))
-        EventBus.getDefault().register(AddItemController(itemRepository))
-        EventBus.getDefault().register(UpdateItemController(cartItemRepository, viewModel))
-        EventBus.getDefault().register(ActionController(cartItemRepository, viewModel))
+        EventBus.getDefault().register(ItemListController(cartItemDao, viewModel))
+        EventBus.getDefault().register(AddItemController(itemDao))
+        EventBus.getDefault().register(UpdateItemController(cartItemDao, viewModel))
+        EventBus.getDefault().register(ActionController(cartItemDao, viewModel))
         setContent {
             MainView()
         }
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 Column {
                     ActionBar(viewModel)
                     ShoppingListView(viewModel)
-                    AddItemComponent(itemRepository)
+                    AddItemComponent(itemDao)
                 }
             }
         }

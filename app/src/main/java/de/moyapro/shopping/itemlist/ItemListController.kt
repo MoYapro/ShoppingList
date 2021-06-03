@@ -5,7 +5,7 @@ import de.moyapro.shopping.event.ReloadEvent
 import de.moyapro.shopping.event.RemoveCheckedEvent
 import de.moyapro.shopping.model.CartItem
 import de.moyapro.shopping.model.CartItemRelation
-import de.moyapro.shopping.repository.CartItemRepository
+import de.moyapro.shopping.dao.CartItemDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.Subscribe
 
 class ItemListController(
-    private val cartItemRepository: CartItemRepository,
+    private val cartItemDao: CartItemDao,
     private val viewModel: AppViewModel
 ) {
 
@@ -39,7 +39,7 @@ class ItemListController(
             launch {
                 lateinit var loadedItems: List<CartItemRelation>
                 withContext(Dispatchers.IO) {
-                    loadedItems = cartItemRepository.getAll()
+                    loadedItems = cartItemDao.getAll()
                 }
                 viewModel.setItems(loadedItems)
             }
