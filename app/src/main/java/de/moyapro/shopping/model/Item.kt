@@ -5,13 +5,11 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "item")
-data class Item constructor(
-    @PrimaryKey(autoGenerate = true)
-    val itemId: Long,
+data class Item constructor (
     val itemName: String,
     val checked: Boolean,
     val added: Boolean
 ) {
-
-    constructor(name: String, checked: Boolean = false, added: Boolean = false) : this(0, name, checked, added)
+    @PrimaryKey(autoGenerate = true)
+    var itemId: Long = 0
 }

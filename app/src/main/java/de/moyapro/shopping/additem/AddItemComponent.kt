@@ -85,7 +85,7 @@ fun AddItemComponent(itemDao: ItemDao) {
 }
 
 private fun postNewItemEvent(suggestionText: String) {
-    val newItem = Item(name = suggestionText, checked = false, added = true)
+    val newItem = Item(itemName = suggestionText, checked = false, added = true)
     EventBus.getDefault().post(
         ItemAddedEvent(
             newItem

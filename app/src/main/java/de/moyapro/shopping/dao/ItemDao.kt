@@ -9,21 +9,21 @@ import de.moyapro.shopping.model.Item
 @Dao
 interface ItemDao {
     @Query("SELECT * FROM item")
-    fun getAll(): List<Item>
+    suspend fun getAll(): List<Item>
 
     @Query("SELECT * FROM Item WHERE itemId IN (:idList)")
-    fun loadAllByIds(vararg idList: Long): List<Item>
+    suspend fun loadAllByIds(vararg idList: Long): List<Item>
 
     @Insert
-    fun insertAll(vararg item: Item)
+    suspend fun insertAll(vararg item: Item)
 
     @Insert
-    fun insertAll(items: List<Item>)
+    suspend fun insertAll(items: List<Item>)
 
     @Update
-    fun updateAll(items: List<Item>)
+    suspend fun updateAll(items: List<Item>)
 
     @Update
-    fun updateAll(vararg item: Item)
+    suspend fun updateAll(vararg item: Item)
 
 }

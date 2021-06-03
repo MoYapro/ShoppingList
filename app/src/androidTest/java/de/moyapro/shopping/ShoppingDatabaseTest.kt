@@ -9,6 +9,7 @@ import de.moyapro.shopping.model.Item
 import de.moyapro.shopping.dao.CartItemDao
 import de.moyapro.shopping.dao.ItemDao
 import junit.framework.TestCase
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -35,9 +36,9 @@ class ShoppingDatabaseTest: TestCase() {
     }
 
     @Test
-    fun shouldReadAndWriteItem() {
+    fun shouldReadAndWriteItem() = runBlocking {
         // Arrange
-        val item = Item(name = "Item Name", checked = true, added = true)
+        val item = Item(itemName = "Item Name", checked = true, added = true)
 
         // Act
         itemDao.insertAll(item)
@@ -49,15 +50,15 @@ class ShoppingDatabaseTest: TestCase() {
     }
 
     @Test
-    fun shouldReadAndWriteCartItem() {
+    fun shouldReadAndWriteCartItem() = runBlocking {
         // Arrange
-        val item = Item(name = "Item Name", checked = true, added = true)
+        val item = Item(itemName = "Item Name", checked = true, added = true)
 
 
         // Act
         itemDao.insertAll(item)
         val itemResult = itemDao.getAll().first()
-        val cartItem = CartItem(0, itemResult.itemId, 12, true)
+        val cartItem = CartItem( itemResult.itemId, 12, true)
         cartItemDao.updateAll(itemResult)
         cartItemDao.updateAll(cartItem)
 
