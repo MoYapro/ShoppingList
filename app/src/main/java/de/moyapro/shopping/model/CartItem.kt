@@ -6,11 +6,11 @@ import java.util.*
 
 @Entity(tableName = "cartitem")
 data class CartItem(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val cartItemId: Long,
     val itemId: Long,
     val amount: Int,
     val checked: Boolean
 ) {
-    constructor(itemId: Long) : this(Random().nextLong(), itemId, 1, false)
+    constructor(itemId: Long) : this(0, itemId, 1, false)
 }

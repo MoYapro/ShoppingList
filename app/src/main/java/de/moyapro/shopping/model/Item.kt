@@ -6,11 +6,12 @@ import java.util.*
 
 @Entity(tableName = "item")
 data class Item constructor(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val itemId: Long,
     val itemName: String,
     val checked: Boolean,
     val added: Boolean
 ) {
-    constructor(name: String, checked: Boolean = false, added: Boolean = false) : this(Random().nextLong(), name, checked, added)
+
+    constructor(name: String, checked: Boolean = false, added: Boolean = false) : this(0, name, checked, added)
 }
