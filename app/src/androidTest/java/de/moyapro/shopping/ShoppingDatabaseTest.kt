@@ -6,11 +6,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.moyapro.shopping.model.CartItem
 import de.moyapro.shopping.model.Item
-import de.moyapro.shopping.repository.CartItemRepository
-import de.moyapro.shopping.repository.ItemRepository
+import de.moyapro.shopping.dao.CartItemDao
+import de.moyapro.shopping.dao.ItemDao
 import junit.framework.TestCase
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -18,8 +20,8 @@ import org.junit.runner.RunWith
 class ShoppingDatabaseTest: TestCase() {
 
     private lateinit var shoppingDb: ShoppingDatabase
-    private lateinit var itemDao: ItemRepository
-    private lateinit var cartItemDao: CartItemRepository
+    private lateinit var itemDao: ItemDao
+    private lateinit var cartItemDao: CartItemDao
 
     @Before
     public override fun setUp() {
@@ -35,29 +37,45 @@ class ShoppingDatabaseTest: TestCase() {
     }
 
     @Test
-    fun shouldReadAndWriteItem() {
+    fun shouldReadAndWriteItem() = runBlocking {
         // Arrange
-        val item = Item(name = "Item Name", checked = true, added = true)
+        val item = Item(itemName = "Item Name", checked = true, added = true)
 
         // Act
-        itemDao.insertAll(item)
+        val insertedIds = itemDao.insertAll(item)
         val itemList = itemDao.getAll()
 
         // Assert
         assertTrue("itemList should has correct size", itemList.size == 1)
         assertTrue("itemId should be greater 0", 0 < itemList[0].itemId)
+        assertTrue("item should has correct itemId", insertedIds.contains(1))
     }
 
     @Test
-    fun shouldReadAndWriteCartItem() {
+    fun shouldInsertManyItems() = runBlocking {
         // Arrange
-        val item = Item(name = "Item Name", checked = true, added = true)
+        val itemList = listOf(
+            Item( itemName = "Item1", checked = false, added = true),
+            Item( itemName = "Item2", checked = false, added = true)
+        )
+        // Act
+        val insertedIds = itemDao.insertAll(itemList)
+
+        // Assert
+        assertTrue("insertedIds should contains correct Ids", insertedIds.containsAll(listOf(1, 2)))
+    }
+
+    @Ignore("TODO")
+    @Test
+    fun shouldReadAndWriteCartItem() = runBlocking {
+        // Arrange
+        val item = Item(itemName = "Item Name", checked = true, added = true)
 
 
         // Act
         itemDao.insertAll(item)
         val itemResult = itemDao.getAll().first()
-        val cartItem = CartItem(0, itemResult.itemId, 12, true)
+        val cartItem = CartItem( itemResult.itemId, 12, true)
         cartItemDao.updateAll(itemResult)
         cartItemDao.updateAll(cartItem)
 

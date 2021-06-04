@@ -4,7 +4,7 @@ import de.moyapro.shopping.event.AppStateChangedEvent
 import de.moyapro.shopping.event.ItemCheckedEvent
 import de.moyapro.shopping.event.RemoveCheckedEvent
 import de.moyapro.shopping.itemlist.AppViewModel
-import de.moyapro.shopping.repository.CartItemRepository
+import de.moyapro.shopping.dao.CartItemDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.Subscribe
 
 class ActionController(
-    private val cartItemRepository: CartItemRepository,
+    private val cartItemDao: CartItemDao,
     private val viewModel: AppViewModel
 ) {
 
@@ -26,8 +26,8 @@ class ActionController(
         runBlocking {
             launch {
                 withContext(Dispatchers.IO) {
-                    val checkedItems = cartItemRepository.getChecked()
-                    cartItemRepository.removeAll(checkedItems.map { it.cartItem })
+                    val checkedItems = cartItemDao.getChecked()
+                    cartItemDao.removeAll(checkedItems.map { it.cartItem })
                 }
             }
         }
@@ -38,8 +38,8 @@ class ActionController(
         runBlocking {
             launch {
                 withContext(Dispatchers.IO) {
-                    cartItemRepository.updateAll(itemCheckedEventEvent.item.cartItem)
-                    cartItemRepository.updateAll(itemCheckedEventEvent.item.item)
+                    cartItemDao.updateAll(itemCheckedEventEvent.item.cartItem)
+                    cartItemDao.updateAll(itemCheckedEventEvent.item.item)
                 }
             }
         }
