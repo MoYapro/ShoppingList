@@ -6,9 +6,9 @@ import java.util.*
 
 @Entity(tableName = "item")
 data class Item constructor (
-    val itemName: String,
-    val checked: Boolean,
-    val added: Boolean
+    var itemName: String,
+    var checked: Boolean,
+    var added: Boolean
 ) {
     @PrimaryKey(autoGenerate = true)
     var itemId: Long = 0

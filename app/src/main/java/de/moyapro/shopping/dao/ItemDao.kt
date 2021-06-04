@@ -15,10 +15,10 @@ interface ItemDao {
     suspend fun loadAllByIds(vararg idList: Long): List<Item>
 
     @Insert
-    suspend fun insertAll(vararg item: Item)
+    suspend fun insertAll(vararg item: Item): List<Long>
 
     @Insert
-    suspend fun insertAll(items: List<Item>)
+    suspend fun insertAll(items: List<Item>): List<Long>
 
     @Update
     suspend fun updateAll(items: List<Item>)

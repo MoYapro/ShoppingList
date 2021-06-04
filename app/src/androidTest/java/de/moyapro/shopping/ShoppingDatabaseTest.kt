@@ -12,6 +12,7 @@ import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -41,14 +42,30 @@ class ShoppingDatabaseTest: TestCase() {
         val item = Item(itemName = "Item Name", checked = true, added = true)
 
         // Act
-        itemDao.insertAll(item)
+        val insertedIds = itemDao.insertAll(item)
         val itemList = itemDao.getAll()
 
         // Assert
         assertTrue("itemList should has correct size", itemList.size == 1)
         assertTrue("itemId should be greater 0", 0 < itemList[0].itemId)
+        assertTrue("item should has correct itemId", insertedIds.contains(1))
     }
 
+    @Test
+    fun shouldInsertManyItems() = runBlocking {
+        // Arrange
+        val itemList = listOf(
+            Item( itemName = "Item1", checked = false, added = true),
+            Item( itemName = "Item2", checked = false, added = true)
+        )
+        // Act
+        val insertedIds = itemDao.insertAll(itemList)
+
+        // Assert
+        assertTrue("insertedIds should contains correct Ids", insertedIds.containsAll(listOf(1, 2)))
+    }
+
+    @Ignore("TODO")
     @Test
     fun shouldReadAndWriteCartItem() = runBlocking {
         // Arrange
